@@ -1,24 +1,23 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="racetrack_world">
-    <!-- Gravity and Lighting -->
+    <!-- Gravity  -->
     <gravity>0 0 -9.8</gravity>
-    <include>
-      <uri>model://sun</uri>
-    </include>
+
     
-    <!-- Ground Plane -->
+    <!-- Ground Plane
     <include>
       <uri>model://ground_plane</uri>
-    </include>
+    </include> -->
 
-    <!-- Racecar Spawn Point -->
+
+    <!-- Racecar Spawn Point
     <model name="racecar">
       <pose>0 0 0.1 0 0 0</pose>
       <include>
         <uri>model://racecar</uri>
       </include>
-    </model>
+    </model> -->
     
     <!-- Track Boundaries -->
     <model name="track_left_boundary">
@@ -27,7 +26,7 @@
         <visual name="visual">
           <geometry>
             <box>
-              <size>0.5 20 0.5</size> <!-- Adjust size as needed -->
+              <size>5 20 .5</size> <!-- Adjust size as needed -->
             </box>
           </geometry>
           <material>
@@ -47,7 +46,7 @@
         <visual name="visual">
           <geometry>
             <box>
-              <size>0.5 20 0.5</size> <!-- Adjust size as needed -->
+              <size>5 20 0.5</size> <!-- Adjust size as needed -->
             </box>
           </geometry>
           <material>
@@ -107,9 +106,6 @@
     <!-- Track Textures and Finishing Touches -->
     <scene>
       <sky>
-        <clouds>
-          <speed>12</speed>
-        </clouds>
       </sky>
     </scene>
   </world>
