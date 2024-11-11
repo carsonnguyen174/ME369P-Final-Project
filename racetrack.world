@@ -26,7 +26,7 @@
         <visual name="visual">
           <geometry>
             <box>
-              <size>5 20 .5</size> <!-- Adjust size as needed -->
+              <size>5 40 .5</size> <!-- Adjust size as needed -->
             </box>
           </geometry>
           <material>
@@ -46,7 +46,7 @@
         <visual name="visual">
           <geometry>
             <box>
-              <size>5 20 0.5</size> <!-- Adjust size as needed -->
+              <size>5 40 0.5</size> <!-- Adjust size as needed -->
             </box>
           </geometry>
           <material>
