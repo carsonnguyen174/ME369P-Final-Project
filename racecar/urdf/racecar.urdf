@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="racecar">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.011961 0.0014322 0.010369"
+        rpy="0 0 0" />
+      <mass
+        value="0.53959" />
+      <inertia
+        ixx="0.00049247"
+        ixy="-5.2134E-07"
+        ixz="4.2583E-06"
+        iyy="0.00078598"
+        iyz="-4.8E-07"
+        izz="0.0012366" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="bl_link">
+    <inertial>
+      <origin
+        xyz="-3.0809E-15 -0.0061847 -1.7746E-15"
+        rpy="0 0 0" />
+      <mass
+        value="0.04139" />
+      <inertia
+        ixx="1.6789E-05"
+        ixy="-2.1023E-20"
+        ixz="-5.6357E-23"
+        iyy="2.9634E-05"
+        iyz="-4.87E-20"
+        izz="1.6789E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/bl_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/bl_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bl_joint"
+    type="continuous">
+    <origin
+      xyz="-0.13238 0.070603 0.014"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="bl_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="br_link">
+    <inertial>
+      <origin
+        xyz="-2.7756E-17 0.0061847 5.2042E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.04139" />
+      <inertia
+        ixx="1.6789E-05"
+        ixy="4.7172E-20"
+        ixz="3.012E-23"
+        iyy="2.9634E-05"
+        iyz="-6.8795E-21"
+        izz="1.6789E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/br_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/br_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="br_joint"
+    type="continuous">
+    <origin
+      xyz="-0.13238 -0.070603 0.014"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="br_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="left_link">
+    <inertial>
+      <origin
+        xyz="0.00048142 0.0039043 -0.0071148"
+        rpy="0 0 0" />
+      <mass
+        value="0.01698" />
+      <inertia
+        ixx="1.3987E-06"
+        ixy="-2.7905E-08"
+        ixz="-4.4121E-11"
+        iyy="3.7725E-07"
+        iyz="-1.3287E-12"
+        izz="1.5166E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="akbl_joint"
+    type="revolute">
+    <origin
+      xyz="0.1323 0.043 0.0224"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="fl_link">
+    <inertial>
+      <origin
+        xyz="-0.0014437 -0.0061469 -6.5919E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.04139" />
+      <inertia
+        ixx="1.6789E-05"
+        ixy="-2.3334E-20"
+        ixz="-2.4007E-21"
+        iyy="2.9634E-05"
+        iyz="5.8291E-21"
+        izz="1.6789E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/fl_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/fl_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl_joint"
+    type="continuous">
+    <origin
+      xyz="0.0014457 0.027515 -0.0085"
+      rpy="0 0 -7.227E-05" />
+    <parent
+      link="left_link" />
+    <child
+      link="fl_link" />
+    <axis
+      xyz="-0.052397 -0.99863 0" />
+  </joint>
+  <link
+    name="front_link1">
+    <inertial>
+      <origin
+        xyz="1.2521E-05 -0.046798 -0.0035"
+        rpy="0 0 0" />
+      <mass
+        value="0.0035583" />
+      <inertia
+        ixx="3.3269E-06"
+        ixy="8.93E-12"
+        ixz="-3.2508E-15"
+        iyy="3.3176E-08"
+        iyz="-1.8614E-13"
+        izz="3.3233E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/front_link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/front_link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="akfl_joint"
+    type="revolute">
+    <origin
+      xyz="0.024615 0.0039982 -0.005"
+      rpy="0 0 0" />
+    <parent
+      link="left_link" />
+    <child
+      link="front_link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="akbr_joint"
+    type="revolute">
+    <origin
+      xyz="0.1323 -0.043 0.0224"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="fr_link">
+    <inertial>
+      <origin
+        xyz="0.001455 0.0061463 -1.8163E-15"
+        rpy="0 0 0" />
+      <mass
+        value="0.04139" />
+      <inertia
+        ixx="1.6789E-05"
+        ixy="-2.1868E-20"
+        ixz="9.6889E-22"
+        iyy="2.9634E-05"
+        iyz="7.4954E-21"
+        izz="1.6789E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/fr_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.6 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/fr_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr_joint"
+    type="continuous">
+    <origin
+      xyz="-0.001453 -0.027514 -0.0085"
+      rpy="0 0 7.227E-05" />
+    <parent
+      link="right_link" />
+    <child
+      link="fr_link" />
+    <axis
+      xyz="0.052808 0.9986 0" />
+  </joint>
+  <link
+    name="front_link2">
+    <inertial>
+      <origin
+        xyz="1.2521E-05 0.047199 -0.0035"
+        rpy="0 0 0" />
+      <mass
+        value="0.0035583" />
+      <inertia
+        ixx="3.3269E-06"
+        ixy="8.93E-12"
+        ixz="-3.2508E-15"
+        iyy="3.3176E-08"
+        iyz="-1.8614E-13"
+        izz="3.3233E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/front_link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://racecar/meshes/front_link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="akfr_joint"
+    type="revolute">
+    <origin
+      xyz="0.024615 -0.0039982 -0.005"
+      rpy="0 0 0" />
+    <parent
+      link="right_link" />
+    <child
+      link="front_link2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>
