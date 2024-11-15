@@ -1,1 +1,27 @@
-Gazebo Install: https://gazebosim.org/docs/latest/install/
+1) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
+2) useful link for manipulating joints: https://gerardmaggiolino.medium.com/creating-openai-gym-environments-with-pybullet-part-1-13895a622b24
+3) https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit?tab=t.0
+   
+4) To install SpeechRecognition and its required dependencies:
+    - Windows (non-x84):
+        - Install SpeechRecognition package:
+            *pip install SpeechRecognition*
+        - Install PyAudio package:
+            *pip install PyAudio*
+        - Install FLAC Encoder:
+            
+            i. Go to https://ftp.osuosl.org/pub/xiph/releases/flac/ then download
+            the latest .zip folder
+
+            ii. Extract that folder, then navigate into the extracted folder into either the Win32
+            or Win64 folder depending on your Windows type. 
+
+            iii. Double click *flac.exe* and *metaflac.exe*
+    
+    - Windows (x84):
+        - Install SpeechRecognition package:
+            *pip install SpeechRecognition*
+        - Install PyAudio package:
+            *pip install PyAudio*
+    
+    - Linux:
