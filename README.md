@@ -1,4 +1,5 @@
-1)Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
+1) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
+   
 2) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
         - Install SpeechRecognition package:
