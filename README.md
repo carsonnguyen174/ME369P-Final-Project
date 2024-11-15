@@ -1,9 +1,9 @@
 1) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
         - Install SpeechRecognition package:
-            pip install SpeechRecognition
+            *pip install SpeechRecognition*
         - Install PyAudio package:
-            pip install PyAudio
+            *pip install PyAudio*
         - Install FLAC Encoder:
             
             i. Go to https://ftp.osuosl.org/pub/xiph/releases/flac/ then download
@@ -12,13 +12,13 @@
             ii. Extract that folder, then navigate into the extracted folder into either the Win32
             or Win64 folder depending on your Windows type. 
 
-            iii. Double click flac.exe and metaflac.exe
+            iii. Double click *flac.exe* and *metaflac.exe*
     
     - Windows (x84):
         - Install SpeechRecognition package:
-            pip install SpeechRecognition
+            *pip install SpeechRecognition*
         - Install PyAudio package:
-            pip install PyAudio
+            *pip install PyAudio*
     
     - Linux:
 
