@@ -1,7 +1,8 @@
 1) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
 2) useful link for manipulating joints: https://gerardmaggiolino.medium.com/creating-openai-gym-environments-with-pybullet-part-1-13895a622b24
+3) https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit?tab=t.0
    
-3) To install SpeechRecognition and its required dependencies:
+4) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
         - Install SpeechRecognition package:
             *pip install SpeechRecognition*
