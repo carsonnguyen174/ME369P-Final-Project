@@ -3,7 +3,7 @@ import pybullet_data
 import speech_recognition as sr
 import time
 import threading
-import word2number as wn #some times reads as five and not 5 so it won't convert and move need to implement this in the code 
+import word2number as wn #some times reads as five and not 5 (and other numbers) so it won't convert and move need to implement this in the code 
 
 p.connect(p.GUI)
 p.resetSimulation()
@@ -16,8 +16,8 @@ start_pos = [0, 0, 0]
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
 car = p.loadURDF("racecar/racecar.urdf", start_pos, start_orientation)
 
-wheels = [2, 3]  # rear wheels for motor torque
-steering = [4, 6]  # front wheels for steering angle 
+wheels = [2, 3]  # rear wheels indicies for motor torque
+steering = [4, 6]  # front wheels indicies for steering angle 
 
 def process_command():
     recog = sr.Recognizer()
