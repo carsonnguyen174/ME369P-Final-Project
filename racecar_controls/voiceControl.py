@@ -78,10 +78,10 @@ while p.isConnected():
     p.resetDebugVisualizerCamera(cameraDistance=3, cameraYaw=0, cameraPitch=-40, cameraTargetPosition=Position)
 
     for wheel in wheels:
-        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
+        p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
 
     for steer in steering:
-        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=steer, controlMode=p.POSITION_CONTROL,targetPosition=steeringAngle)
+        p.setJointMotorControl2(car, jointIndex=steer, controlMode=p.POSITION_CONTROL,targetPosition=steeringAngle)
 
     p.stepSimulation()
     time.sleep(1/240)
