@@ -3,6 +3,7 @@ import pybullet_data
 import speech_recognition as sr
 import time
 import threading
+import word2number as wn #some times reads as five and not 5 so it won't convert and move need to implement this in the code 
 
 p.connect(p.GUI)
 p.resetSimulation()
@@ -46,10 +47,10 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-targetVelocity = 50
-steeringAngle = 0.5  # radians
+targetVelocity = 10
+steeringAngle = 0  # radians
 
-# Function to continuously listen for voice commands
+#set new direction/speed based on voice commands 
 def voice_command_thread():
     global targetVelocity, steeringAngle
     while True:
@@ -68,36 +69,19 @@ def voice_command_thread():
             targetVelocity = 0
             steeringAngle = 0
 
-# Start the voice command thread
+#runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
 
-# Main simulation loop
 while p.isConnected():
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(
-        cameraDistance=3, 
-        cameraYaw=75, 
-        cameraPitch=-20, 
-        cameraTargetPosition=Position
-    )
+    p.resetDebugVisualizerCamera(cameraDistance=3, cameraYaw=0, cameraPitch=-40, cameraTargetPosition=Position)
 
     for wheel in wheels:
-        p.setJointMotorControl2(
-            bodyUniqueId=car,
-            jointIndex=wheel,
-            controlMode=p.VELOCITY_CONTROL,
-            targetVelocity=targetVelocity,
-            force=10  
-        )
+        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
 
     for steer in steering:
-        p.setJointMotorControl2(
-            bodyUniqueId=car,
-            jointIndex=steer,
-            controlMode=p.POSITION_CONTROL,
-            targetPosition=steeringAngle
-        )
+        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=steer, controlMode=p.POSITION_CONTROL,targetPosition=steeringAngle)
 
     p.stepSimulation()
     time.sleep(1/240)
