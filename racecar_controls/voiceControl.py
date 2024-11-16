@@ -2,6 +2,7 @@ import pybullet as p
 import pybullet_data
 import speech_recognition as sr
 import time
+import threading
 
 p.connect(p.GUI)
 p.resetSimulation()
@@ -17,7 +18,7 @@ car = p.loadURDF("racecar/racecar.urdf", start_pos, start_orientation)
 wheels = [2, 3]  # rear wheels for motor torque
 steering = [4, 6]  # front wheels for steering angle 
 
-def process_voice_command():
+def process_command():
     recog = sr.Recognizer()
     
     with sr.Microphone() as source:
@@ -28,7 +29,6 @@ def process_voice_command():
         command = recog.recognize_google(audio).lower()
         print(f"You said: {command}")
 
-        # Parse command for direction and magnitude
         parsed_command = command.split()
         if len(parsed_command) == 0:
             print("No command detected.")
@@ -46,29 +46,41 @@ def process_voice_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
+targetVelocity = 50
+steeringAngle = 0.5  # radians
+
+# Function to continuously listen for voice commands
+def voice_command_thread():
+    global targetVelocity, steeringAngle
+    while True:
+        direction, magnitude = process_command()
+        if direction == "forward":
+            targetVelocity = magnitude
+        elif direction == "backward":
+            targetVelocity = -magnitude
+        elif direction == "left":
+            steeringAngle = -magnitude
+        elif direction == "right":
+            steeringAngle = magnitude
+        elif direction == "write":
+            steeringAngle = magnitude
+        elif direction == "stop":
+            targetVelocity = 0
+            steeringAngle = 0
+
+# Start the voice command thread
+threading.Thread(target=voice_command_thread, daemon=True).start()
+
+# Main simulation loop
 while p.isConnected():
-    direction, magnitude = process_voice_command()
 
-    targetVelocity = 50
-    steeringAngle = .5  # radians
-
-    # If no valid command, continue with the previous values
-    if direction is None:
-        print(f"Using previous values -> Speed: {targetVelocity}, Steering: {steeringAngle}")
-        direction = "no_command"
-
-    if direction == "forward":
-        targetVelocity = magnitude
-    elif direction == "backward":
-        targetVelocity = -magnitude
-    elif direction == "left":
-        steeringAngle = -magnitude
-    elif direction == "right":
-        steeringAngle = magnitude
-    elif direction == "stop":
-        targetVelocity = 0
-        steeringAngle = 0
-
+    Position, Orientation = p.getBasePositionAndOrientation(car)
+    p.resetDebugVisualizerCamera(
+        cameraDistance=3, 
+        cameraYaw=75, 
+        cameraPitch=-20, 
+        cameraTargetPosition=Position
+    )
 
     for wheel in wheels:
         p.setJointMotorControl2(
@@ -88,4 +100,4 @@ while p.isConnected():
         )
 
     p.stepSimulation()
-    time.sleep(1 / 240)
+    time.sleep(1/240)
