@@ -19,28 +19,8 @@ num_joints = p.getNumJoints(car)
 wheels = [2, 3]  #rear wheels for motor torque
 steering = [4, 6]  #front wheels control angle 
 
-targetVelocity = 0 
-steeringAngle = 0  #radians
-
-# direction=command[0]
-# magnitude=command[1]
-# match direction:
-#     case "forward": 
-#         targetVelocity = magnitude
-
-#     case "backward": 
-#         targetVelocity = -magnitude
-
-#     case "left": 
-#         steeringAngle = -magnitude
-
-#     case "right": 
-#         steeringAngle = magnitude
-
-#     case "stop": 
-#         targetVelocity=0
-#         steeringAngle=0
-
+targetVelocity = 50
+steeringAngle = 7  #radians
 
 for _ in range(1000):
     #forward/backward
