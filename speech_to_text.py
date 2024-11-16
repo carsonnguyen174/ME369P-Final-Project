@@ -59,8 +59,6 @@ def voice():
         # print("Command length:", type(input))
         value, processed_command = command(input)
         
-
-
         # Check if command is in the valid set of commands, if not return an error
         if processed_command not in possible_commands:
             print("Not a valid command. Please follow format of available commands where <x> is a positive float")
