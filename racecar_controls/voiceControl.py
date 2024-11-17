@@ -18,10 +18,10 @@ start_orientation = p.getQuaternionFromEuler([0, 0, 0])
 car = p.loadURDF("racecar/racecar.urdf", start_pos, start_orientation)
 
 wheels = [2, 3]  # rear wheels indicies for motor torque
-steering = [4, 6]  # front wheels indicies for steering angle 
+steering = [4, 6]  # front wheels indicies for steering angle
 
 # Dictionary for possible driving keywords
-keywords = {0: ['forward', 'drive', 'front'], 1: ['backward', 'reverse', 'backwards', 'back'], 2: ['left'], 3: ['right', 'write'], 4: ['stop', 'park']}
+keywords = {0: ['forward', 'drive', 'front'], 1: ['backward', 'reverse', 'backwards', 'back'], 2: ['left', 'last'], 3: ['right', 'write'], 4: ['stop', 'park']}
 
 def process_command():
     recog = sr.Recognizer()
@@ -64,7 +64,7 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-targetVelocity = 0
+targetVelocity = 0 # rad/s
 steeringAngle = 0  # degrees
 
 #set new direction/speed based on voice commands
@@ -87,11 +87,11 @@ def voice_command_thread():
         
         # Turn left
         elif direction in keywords[2]:
-            steeringAngle = np.rad2deg(magnitude)
+            steeringAngle = np.deg2rad(magnitude)
         
         # Turn right
         elif direction in keywords[3]:
-            steeringAngle = -np.rad2deg(magnitude)
+            steeringAngle = -np.deg2rad(magnitude)
 
         # Stop
         elif direction in keywords[4]:
@@ -104,15 +104,11 @@ threading.Thread(target=voice_command_thread, daemon=True).start()
 while p.isConnected():
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=3, cameraYaw=0, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=4, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
 
     # Sets the speed for each drive wheel
     for wheel in wheels:
         p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
-
-    for steer in steering:
-        p.setJointMotorControl2(car, jointIndex=steer, controlMode=p.POSITION_CONTROL,targetPosition=steeringAngle)
-        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
     
     # Sets the steering for each front wheel
     for steer in steering:
