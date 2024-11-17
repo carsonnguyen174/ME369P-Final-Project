@@ -12,9 +12,11 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
-start_pos = [0, 0, 0]  
+start_position = [0, 0, 0]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-car = p.loadURDF("racecar/racecar.urdf", start_pos, start_orientation)
+# chassis is about 10.3 x 5.1 x 1.5 mm
+car = p.loadURDF("racecar/racecar.urdf", start_position, start_orientation)
+#track = p.loadURDF("", start_position, start_orientation)
 
 wheels = [2, 3]  # rear wheels indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle 
@@ -48,7 +50,7 @@ def process_command():
         return None, None
 
 targetVelocity = 10
-steeringAngle = 0  # radians
+steeringAngle = 0 # radians
 
 #set new direction/speed based on voice commands 
 def voice_command_thread():
