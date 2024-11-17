@@ -48,10 +48,10 @@ for step in range(500):
     #set velocity control instead of postion control
     #can change link and joint states 
     p.setJointMotorControlArray(targid, [2,4], p.POSITION_CONTROL, targetPositions=[joint_two_targ, joint_four_targ])
-    p.setpSimulation()
+    p.resetSimulation()
     # focus_position, _ = p.getBasePositionAndOrientation(targid)
     # p.resetDebugVisualCamera(cameraDistance=3, cameraYaw=o, cameraPitch=-40, cameraTargetPosition=focus_position)
-    # p.setpSimulation()
+
 
 
 class Enviromen():
