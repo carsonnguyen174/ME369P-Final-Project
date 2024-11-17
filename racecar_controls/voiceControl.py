@@ -3,7 +3,8 @@ import pybullet_data
 import speech_recognition as sr
 import time
 import threading
-import word2number as wn #some times reads as five and not 5 (and other numbers) so it won't convert and move need to implement this in the code 
+import numpy as np
+from word2number import w2n as wn 
 
 p.connect(p.GUI)
 p.resetSimulation()
@@ -12,18 +13,18 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
-start_position = [0, 0, 0]  
+start_pos = [0, 0, 0]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-# chassis is about 10.3 x 5.1 x 1.5 mm
-car = p.loadURDF("racecar/racecar.urdf", start_position, start_orientation)
-#track = p.loadURDF("", start_position, start_orientation)
+car = p.loadURDF("racecar/racecar.urdf", start_pos, start_orientation)
 
 wheels = [2, 3]  # rear wheels indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle 
 
+# Dictionary for possible driving keywords
+keywords = {0: ['forward', 'drive', 'front'], 1: ['backward', 'reverse', 'backwards', 'back'], 2: ['left'], 3: ['right', 'write'], 4: ['stop', 'park']}
+
 def process_command():
     recog = sr.Recognizer()
-    
     with sr.Microphone() as source:
         print("Listening for commands...")
         audio = recog.listen(source)
@@ -31,43 +32,69 @@ def process_command():
     try:
         command = recog.recognize_google(audio).lower()
         print(f"You said: {command}")
-
+        
         parsed_command = command.split()
         if len(parsed_command) == 0:
-            print("No command detected.")
+            print("No command detected. Try saying something")
             return None, None
 
         direction = parsed_command[0]
-        magnitude = float(parsed_command[1]) if len(parsed_command) > 1 else 0
+
+        if len(parsed_command) > 2:
+            print("Please enter in a valid, singular command followed by a floating positive number")
+            return None, None
+
+        # Sorts out magnitude from the parsed command
+        if len(parsed_command) > 1:
+            try:
+                magnitude = wn.word_to_num(parsed_command[1])
+            except:
+                print("Please enter in a valid command followed by a floating positive number")
+                return None, None
+            
+        else:
+            magnitude = 0
 
         return direction, magnitude
 
     except sr.UnknownValueError:
-        print("Sorry, I didn't understand that.")
+        print("Sorry, I didn't understand that. Please try again")
         return None, None
     except sr.RequestError as e:
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-targetVelocity = 10
-steeringAngle = 0 # radians
+targetVelocity = 0
+steeringAngle = 0  # degrees
 
-#set new direction/speed based on voice commands 
+#set new direction/speed based on voice commands
 def voice_command_thread():
     global targetVelocity, steeringAngle
     while True:
         direction, magnitude = process_command()
-        if direction == "forward":
+
+        # Move forward x magnitude
+        if direction in keywords[0] and magnitude:
             targetVelocity = magnitude
-        elif direction == "backward":
+        
+        # Move forward
+        elif direction in keywords[0]:
+            steeringAngle = 0 # Sets steering angle back to default
+
+        # Move backward
+        elif direction in keywords[1]:
             targetVelocity = -magnitude
-        elif direction == "left":
-            steeringAngle = -magnitude
-        elif direction == "right":
-            steeringAngle = magnitude
-        elif direction == "write":
-            steeringAngle = magnitude
-        elif direction == "stop":
+        
+        # Turn left
+        elif direction in keywords[2]:
+            steeringAngle = np.rad2deg(magnitude)
+        
+        # Turn right
+        elif direction in keywords[3]:
+            steeringAngle = -np.rad2deg(magnitude)
+
+        # Stop
+        elif direction in keywords[4]:
             targetVelocity = 0
             steeringAngle = 0
 
@@ -79,11 +106,17 @@ while p.isConnected():
     Position, Orientation = p.getBasePositionAndOrientation(car)
     p.resetDebugVisualizerCamera(cameraDistance=3, cameraYaw=0, cameraPitch=-40, cameraTargetPosition=Position)
 
+    # Sets the speed for each drive wheel
     for wheel in wheels:
         p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
 
     for steer in steering:
         p.setJointMotorControl2(car, jointIndex=steer, controlMode=p.POSITION_CONTROL,targetPosition=steeringAngle)
+        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
+    
+    # Sets the steering for each front wheel
+    for steer in steering:
+        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=steer, controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
 
     p.stepSimulation()
     time.sleep(1/240)
