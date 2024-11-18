@@ -13,9 +13,10 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
-start_pos = [0, 0, 0]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-car = p.loadURDF("racecar/racecar.urdf", start_pos, start_orientation)
+track=p.loadURDF("track/urdf/track.urdf", [0, 0, 0]  , start_orientation)
+car = p.loadURDF("racecar/racecar.urdf", [-10, 0, 1]  , start_orientation)
+
 
 wheels = [2, 3]  # rear wheels indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
@@ -64,13 +65,8 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-<<<<<<< Updated upstream
-targetVelocity = 0 # rad/s
+targetVelocity = 45 # rad/s
 steeringAngle = 0  # degrees
-=======
-targetVelocity = 50 # rad/s wheel angular velocity 
-steeringAngle = 45  # degrees
->>>>>>> Stashed changes
 
 #set new direction/speed based on voice commands
 def voice_command_thread():
@@ -109,7 +105,7 @@ threading.Thread(target=voice_command_thread, daemon=True).start()
 while p.isConnected():
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=4, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=6, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
 
     # Sets the speed for each drive wheel
     for wheel in wheels:
