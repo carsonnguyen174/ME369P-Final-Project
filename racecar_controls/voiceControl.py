@@ -64,8 +64,13 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
+<<<<<<< Updated upstream
 targetVelocity = 0 # rad/s
 steeringAngle = 0  # degrees
+=======
+targetVelocity = 50 # rad/s wheel angular velocity 
+steeringAngle = 45  # degrees
+>>>>>>> Stashed changes
 
 #set new direction/speed based on voice commands
 def voice_command_thread():
@@ -112,7 +117,7 @@ while p.isConnected():
     
     # Sets the steering for each front wheel
     for steer in steering:
-        p.setJointMotorControl2(bodyUniqueId=car, jointIndex=steer, controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
+        p.setJointMotorControl2(car, jointIndex=steer, controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=10)
 
     p.stepSimulation()
     time.sleep(1/240)
