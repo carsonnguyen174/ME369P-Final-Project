@@ -14,8 +14,8 @@ p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-track=p.loadURDF("track/urdf/track.urdf", [0, 0, 0]  , start_orientation)
-car = p.loadURDF("racecar/racecar.urdf", [-10, 0, 1]  , start_orientation)
+track=p.loadURDF("track/urdf/track.urdf", [0, 0, 0]  , start_orientation) #custom track can be changed
+car = p.loadURDF("racecar/racecar.urdf", [-10, 0, 1]  , start_orientation) #pulls from pybullet library
 
 
 wheels = [2, 3]  # rear wheels indicies for motor torque
