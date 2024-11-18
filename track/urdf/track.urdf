@@ -8,17 +8,17 @@
     name="base_link">
     <inertial>
       <origin
-        xyz="1.57051046322491 0.253492520584038 3.7051566373581"
+        xyz="0.085017215036195 0.0781072360031715 0.00049999880976485"
         rpy="0 0 0" />
       <mass
-        value="122116.506904259" />
+        value="0.00606225780461374" />
       <inertia
-        ixx="1524627.42713926"
-        ixy="5871.78076656977"
-        ixz="245322.582141026"
-        iyy="11711806.056211"
-        iyz="1580.91627252165"
-        izz="10192690.5838965" />
+        ixx="2.63913530486579E-06"
+        ixy="2.29171670855056E-06"
+        ixz="5.5798584140298E-13"
+        iyy="1.54487415950466E-05"
+        iyz="-2.37572643412922E-13"
+        izz="1.80868665075586E-05" />
     </inertial>
     <visual>
       <origin
@@ -27,6 +27,7 @@
       <geometry>
         <mesh
           filename="package://track/meshes/base_link.STL" />
+          <scale xyz="3 3 3" />  <!-- Scaling the collision mesh to match visual -->
       </geometry>
       <material
         name="">

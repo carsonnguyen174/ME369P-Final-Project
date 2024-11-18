@@ -65,7 +65,7 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-targetVelocity = 45 # rad/s
+targetVelocity = 0 # rad/s
 steeringAngle = 0  # degrees
 
 #set new direction/speed based on voice commands
