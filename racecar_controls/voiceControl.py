@@ -14,7 +14,7 @@ p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-track=p.loadURDF("track2/urdf/track2.urdf", [0, 0, 0]  , start_orientation) #custom track can be changed
+#track=p.loadURDF("track2/urdf/track2.urdf", [0, 0, 0]  , start_orientation) #custom track can be changed
 car = p.loadURDF("racecar/racecar.urdf", [-10, 0, 1]  , start_orientation) #pulls from pybullet library
 
 
@@ -65,9 +65,10 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
+length = 0.00032500 #meters between the front axle and back axle
+width = 0.0002 #meters between left and right wheel
 targetVelocity = 5 # rad/s
-steeringAngle = 0  # degrees
-
+steeringAngle = 0  # degrees - turning radius
 #set new direction/speed based on voice commands
 def voice_command_thread():
     global targetVelocity, steeringAngle
@@ -98,6 +99,14 @@ def voice_command_thread():
         elif direction in keywords[4]:
             targetVelocity = 0
             steeringAngle = 0
+            
+#set ackermann drive
+if steeringAngle != 0: #if you are turning
+    left_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length + 0.5*width*np.tan(steeringAngle))) #left wheel
+    right_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length - 0.5*width*np.tan(steeringAngle))) #right wheel
+else:
+    left_wheel_angle = 0
+    right_wheel_angle = 0
 
 #runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
@@ -112,8 +121,10 @@ while p.isConnected():
         p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=20)
     
     # Sets the steering for each front wheel
+    # FIX THIS: Why are the forces here set to a specific force and not a force variable?
     for steer in steering:
-        p.setJointMotorControl2(car, jointIndex=steer, controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=10)
+        p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=right_wheel_angle, force=10)
+        p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=left_wheel_angle, force=10)
 
     p.stepSimulation()
     time.sleep(1/240)
