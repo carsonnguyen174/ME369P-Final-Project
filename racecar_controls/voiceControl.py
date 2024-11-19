@@ -14,7 +14,7 @@ p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-track=p.loadURDF("track/urdf/track.urdf", [0, 0, 0]  , start_orientation) #custom track can be changed
+track=p.loadURDF("track2/urdf/track2.urdf", [0, 0, 0]  , start_orientation) #custom track can be changed
 car = p.loadURDF("racecar/racecar.urdf", [-10, 0, 1]  , start_orientation) #pulls from pybullet library
 
 
@@ -65,7 +65,7 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-targetVelocity = 0 # rad/s
+targetVelocity = 5 # rad/s
 steeringAngle = 0  # degrees
 
 #set new direction/speed based on voice commands
@@ -109,7 +109,7 @@ while p.isConnected():
 
     # Sets the speed for each drive wheel
     for wheel in wheels:
-        p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
+        p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=20)
     
     # Sets the steering for each front wheel
     for steer in steering:
