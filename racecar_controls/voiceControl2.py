@@ -16,15 +16,16 @@ plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
 start_pos = [0, 0, 0]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
 car = p.loadURDF("racecar/racecar.urdf",[0,0,1], start_orientation)
-track=p.loadURDF("track2/urdf/track2.urdf", start_pos, start_orientation)
+track=p.loadURDF("track2.urdf", start_pos, start_orientation)
 
 wheels = [2, 3]  # rear wheels indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
 
-targetVelocity = 100 # rad/s
-steeringAngle = -45  # degrees
+#for left turns decrease speed for right turns increase speed 
+targetVelocity =  0 #rad/s
+steeringAngle = 0 # degrees
 
-p.changeDynamics(track, -1, lateralFriction=.75) #change friction of the base link 
+p.changeDynamics(track, -1, lateralFriction=1) #change friction of the base link 
 for wheel in wheels:
     p.changeDynamics(car, wheel, lateralFriction=.75)  # Adjust friction for each wheel 
 for steer in steering:
@@ -91,7 +92,7 @@ def voice_command_thread():
         # Move backward
         elif direction in keywords[1]:
             targetVelocity = -magnitude
-            steeringAngle=0
+            steeringAngle = 0  
         
         # Turn left
         elif direction in keywords[2]:
@@ -109,6 +110,7 @@ def voice_command_thread():
 #runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
 
+
 while p.isConnected():
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
@@ -119,8 +121,15 @@ while p.isConnected():
         p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=10)
     
     # Sets the steering for each front wheel
-    for steer in steering:
-        p.setJointMotorControl2(car, jointIndex=steer, controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=50)
+    if steeringAngle>0:
+        p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=5)
+        p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=10)
+    elif steeringAngle<0:
+        p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=10)
+        p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=5)
+    else:
+        p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=5)
+        p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle, force=5)
 
     p.stepSimulation()
     time.sleep(1/240)
