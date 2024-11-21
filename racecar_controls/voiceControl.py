@@ -74,16 +74,21 @@ def process_command():
         direction = parsed_command[0]
 
         if len(parsed_command) > 2:
-            print("Please enter in a valid, singular command followed by a positive number")
+            print("Please enter in a valid, singular command followed by a positive floating number")
             return None, None
 
         # Sorts out magnitude from the parsed command
         if len(parsed_command) > 1:
             try:
-                magnitude = wn.word_to_num(parsed_command[1])
+                magnitude = float(parsed_command[1])
+                assert magnitude > 0
+                
             except:
-                print("Please enter in a valid command followed by a positive number")
-                return None, None
+                try:
+                    magnitude = wn.word_to_num(parsed_command[1])
+                except:
+                    print("Please enter in a valid command followed by a positive floating number")
+                    return None, None
         else:
             magnitude = 0
 
