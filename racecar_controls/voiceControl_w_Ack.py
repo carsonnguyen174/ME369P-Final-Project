@@ -13,10 +13,10 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
-start_pos = [0, 0, 0]  
+start_pos = [0, 0, .5]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-car = p.loadURDF("racecar/racecar.urdf",[0,0,1], start_orientation)
-track=p.loadURDF("track2/urdf/track2.urdf", start_pos, start_orientation)
+track=p.loadURDF("track3/urdf/track3.urdf", start_pos, start_orientation)
+car = p.loadURDF("racecar/racecar.urdf",[1,0,5], start_orientation)
 
 wheels = [2,3]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
@@ -51,9 +51,7 @@ def process_command():
     recog = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening for commands...\
-              \nPossible Main Commands:\
-              \n'Forward x',  'Backward x', 'Left x', 'Right x', 'Stop',\
-              \nWhere x is a positive float.\n")
+              \n'Forward x',  'Backward x', 'Left x', 'Right x', 'Stop',")
         audio = recog.listen(source)
 
     try:
@@ -93,11 +91,9 @@ def process_command():
 
 #set new direction/speed based on voice commands
 def voice_command_thread():
-    global targetVelocity, steeringAngle, right_wheel_angle, left_wheel_angle
+    global targetVelocity, steeringAngle
     while True:
         direction, magnitude = process_command()
-        #direction = input('direction: ')
-        #magnitude = float(input('magnitude: '))
         # Move forward x magnitude
         if direction in keywords[0] and magnitude:
             targetVelocity = magnitude
@@ -126,13 +122,6 @@ def voice_command_thread():
             targetVelocity = 0
             steeringAngle = 0
         
-        # #make sure the steering is within Ackermann Steering bounds (-35 -- 35 degrees)
-        # steeringAngle = np.clip(steeringAngle, -0.610865, 0.610865)
-
-        # right_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length + 0.5*width*np.tan(steeringAngle))) #right wheel
-        # left_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length - 0.5*width*np.tan(steeringAngle))) #left wheel
-        # print(f"The left wheel turns {left_wheel_angle:.2f} rads")
-        # print(f"The right wheel turns {right_wheel_angle:.2f} rads")
 
 #runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
@@ -142,7 +131,7 @@ while p.isConnected():
     correction = p.readUserDebugParameter(correctionSlider)
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=6, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=6, cameraYaw=-40, cameraPitch=-40, cameraTargetPosition=Position)
 
     #gradually bring the wheels back to 0 position - allows wider turn
     if abs(steeringAngle) > np.deg2rad(correction):
@@ -152,19 +141,16 @@ while p.isConnected():
     
     #make sure the steering is within Ackermann Steering bounds (-35 -- 35 degrees)
     steeringAngle = np.clip(steeringAngle, -0.610865, 0.610865)
+
     #set the wheel angles for Ackermann drive
     right_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length + 0.5*width*np.tan(steeringAngle))) #right wheel
     left_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length - 0.5*width*np.tan(steeringAngle))) #left wheel
-    # print(f"The left wheel turns {left_wheel_angle:.2f} rads")
-    # print(f"The right wheel turns {right_wheel_angle:.2f} rads")
 
     # Sets the speed for each drive wheel
     for wheel in wheels:
         p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL, targetVelocity=targetVelocity, force=set_force)
     
     # Sets the steering for each front wheel
-    # p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
-    # p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
     p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=right_wheel_angle)
     p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=left_wheel_angle)
 
