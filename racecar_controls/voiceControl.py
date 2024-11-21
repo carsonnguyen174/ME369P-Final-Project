@@ -21,9 +21,9 @@ track=p.loadURDF("track3/urdf/track3.urdf", start_pos, start_orientation)
 p.setCollisionFilterGroupMask(track, -1, 1, 1,)
 wheels = [2]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
-inactive_wheels = [3, 5, 7]
+inactive_joints = [3, 5, 7]
 
-for wheel in inactive_wheels:
+for wheel in inactive_joints:
   p.setJointMotorControl2(car, wheel, p.VELOCITY_CONTROL, targetVelocity=0, force=0)
 
 #for left turns decrease speed for right turns increase speed 
