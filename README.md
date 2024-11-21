@@ -1,13 +1,13 @@
 1) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
    
-3) To install Pybullet you must first have C++ on your computer
- - Windows:
-   pip install pybullet
-   or 
-   conda install conda-forge::pybullet
-   
-   -Linux:
-   sudo pip3 install by bullet
+2) To install Pybullet you must first have C++ on your computer
+   - Windows:
+        - pip install pybullet 
+          or
+          conda install conda-forge::pybullet
+
+   - Linux:
+        - sudo pip3 install by bullet 
 
 3) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
@@ -32,5 +32,12 @@
             *pip install PyAudio*
     
     - Linux:
+       - Install SpeechRecognition package:
+           *pip install SpeechRecognition*
+       - Install PyAudio package:
+           *sudo apt-get install python-pyaudio python3-pyaudio*
+          - Alternatively:
+            *sudo apt-get install portaudio19-dev python-all-dev python3-all-dev && sudo pip install SpeechRecognition[audio]*
+
       
 3) PyBullet Official Documentation: https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit?tab=t.0
