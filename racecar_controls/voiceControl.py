@@ -28,10 +28,10 @@ p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [0,
 
 wheels = [2,3]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
-inactive_wheels = [ 5, 7]
+inactive_joints = [ 5, 7]
 
-for wheel in inactive_wheels:
-  p.setJointMotorControl2(car, wheel, p.VELOCITY_CONTROL, targetVelocity=0, force=0)
+for joint in inactive_joints:
+  p.setJointMotorControl2(car, joint, p.VELOCITY_CONTROL, targetVelocity=0, force=0)
 
 #create a correction value slider
 correctionSlider = p.addUserDebugParameter("CorrectionValue", 0, 0.05, 0.01)
