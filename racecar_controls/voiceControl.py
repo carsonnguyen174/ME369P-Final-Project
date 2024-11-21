@@ -36,11 +36,10 @@ for joint in inactive_joints:
 #create a correction value slider
 correctionSlider = p.addUserDebugParameter("CorrectionValue", 0, 0.05, 0.01)
 
-#for left turns decrease speed for right turns increase speed 
 targetVelocity =  0 #rad/s
 steeringAngle = 0 # degrees
 set_force = 15 # Newtons
-length = 0.00032500 #meters between the front axle and back axle
+length = 0.00032500 #meters between the front and back axle 
 width = 0.0002 #meters between left and right wheel
 left_wheel_angle = 0
 right_wheel_angle = 0
@@ -150,7 +149,7 @@ while p.isConnected():
     else:
         steeringAngle = 0
     
-    #make sure the steering is within Ackermann Steering bounds (-35 -- 35 degrees)
+    #make sure the steering is within Ackermann Steering bounds (-35 < x < 35 degrees)
     steeringAngle = np.clip(steeringAngle, -0.610865, 0.610865)
 
     #set the wheel angles for Ackermann drive
