@@ -13,16 +13,31 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
+start_pos = [0, 0, 0]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-#track=p.loadURDF("track2/urdf/track2.urdf", [0, 0, 0]  , start_orientation) #custom track can be changed
-car = p.loadURDF("racecar/racecar.urdf", [-10, 0, 1]  , start_orientation) #pulls from pybullet library
+car = p.loadURDF("racecar/racecar.urdf",[0,0,1], start_orientation)
+track=p.loadURDF("track2/urdf/track2.urdf", start_pos, start_orientation)
 
-
-wheels = [2, 3]  # rear wheels indicies for motor torque
+wheels = [2]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
+inactive_wheels = [3, 5, 7]
+
+for wheel in inactive_wheels:
+  p.setJointMotorControl2(car, wheel, p.VELOCITY_CONTROL, targetVelocity=0, force=0)
+
+#for left turns decrease speed for right turns increase speed 
+targetVelocity =  0 #rad/s
+steeringAngle = 0 # degrees
+set_force = 15 # Newtons
+
+p.changeDynamics(track, -1, lateralFriction=1) #change friction of the base link 
+for wheel in wheels:
+    p.changeDynamics(car, wheel, lateralFriction=1.5)  # Adjust friction for each wheel 
+for steer in steering:
+    p.changeDynamics(car, steer, lateralFriction=1.5)  # Adjust friction for each wheel
 
 # Dictionary for possible driving keywords
-keywords = {0: ['forward', 'drive', 'front'], 1: ['backward', 'reverse', 'backwards', 'back'], 2: ['left', 'last'], 3: ['right', 'write'], 4: ['stop', 'park']}
+keywords = {0: ['forward', 'drive', 'front', 'forwards'], 1: ['backward', 'reverse', 'backwards', 'back'], 2: ['left', 'last'], 3: ['right', 'write', 'rite'], 4: ['stop', 'park']}
 
 def process_command():
     recog = sr.Recognizer()
@@ -65,16 +80,13 @@ def process_command():
         print(f"Error with the speech recognition service: {e}")
         return None, None
 
-length = 0.00032500 #meters between the front axle and back axle
-width = 0.0002 #meters between left and right wheel
-targetVelocity = 5 # rad/s
-steeringAngle = 0  # degrees - turning radius
 #set new direction/speed based on voice commands
 def voice_command_thread():
     global targetVelocity, steeringAngle
     while True:
         direction, magnitude = process_command()
-
+        # direction = input('direction: ')
+        # magnitude = float(input('magnitude: '))
         # Move forward x magnitude
         if direction in keywords[0] and magnitude:
             targetVelocity = magnitude
@@ -86,27 +98,22 @@ def voice_command_thread():
         # Move backward
         elif direction in keywords[1]:
             targetVelocity = -magnitude
+            steeringAngle = 0  
         
         # Turn left
         elif direction in keywords[2]:
             steeringAngle = np.deg2rad(magnitude)
+            # print(steeringAngle)
         
         # Turn right
         elif direction in keywords[3]:
             steeringAngle = -np.deg2rad(magnitude)
+            # print(steeringAngle)
 
         # Stop
         elif direction in keywords[4]:
             targetVelocity = 0
             steeringAngle = 0
-            
-#set ackermann drive
-if steeringAngle != 0: #if you are turning
-    left_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length + 0.5*width*np.tan(steeringAngle))) #left wheel
-    right_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length - 0.5*width*np.tan(steeringAngle))) #right wheel
-else:
-    left_wheel_angle = 0
-    right_wheel_angle = 0
 
 #runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
@@ -114,17 +121,16 @@ threading.Thread(target=voice_command_thread, daemon=True).start()
 while p.isConnected():
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=6, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=2, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
 
     # Sets the speed for each drive wheel
     for wheel in wheels:
-        p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL,targetVelocity=targetVelocity,force=20)
+        p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL, targetVelocity=targetVelocity, force=set_force)
     
     # Sets the steering for each front wheel
-    # FIX THIS: Why are the forces here set to a specific force and not a force variable?
-    for steer in steering:
-        p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=right_wheel_angle, force=10)
-        p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=left_wheel_angle, force=10)
+    p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
+    p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
+    
 
     p.stepSimulation()
     time.sleep(1/240)
