@@ -1,10 +1,10 @@
 <package format="2">
-  <name>track2</name>
+  <name>obstacle2</name>
   <version>1.0.0</version>
   <description>
-    <p>URDF Description package for track2</p>
+    <p>URDF Description package for obstacle2</p>
     <p>This package contains configuration data, 3D models and launch files
-for track2 robot</p>
+for obstacle2 robot</p>
   </description>
   <author>TODO</author>
   <maintainer email="TODO@email.com" />

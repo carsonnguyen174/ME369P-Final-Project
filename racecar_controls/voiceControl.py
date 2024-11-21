@@ -15,21 +15,32 @@ p.setRealTimeSimulation(0)
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
 start_pos = [0, 0, .5]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-car = p.loadURDF("racecar/racecar.urdf",[-1, 0, 5], start_orientation)
-track=p.loadURDF("track3/urdf/track3.urdf", start_pos, start_orientation)
+car = p.loadURDF("racecar/racecar.urdf",[1,0,5], start_orientation)
+track=p.loadURDF("track/urdf/track.urdf", start_pos, start_orientation)
+cylinder = p.loadURDF("obstacle1/urdf/obstacle1.urdf", [0, 0, 3], start_orientation)  
+cube = p.loadURDF("obstacle2/urdf/obstacle2.urdf", [0, 0, 3], start_orientation)
+p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [2, 3, 0.5])
+p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [3, -5, 0.5])
 
-p.setCollisionFilterGroupMask(track, -1, 1, 1,)
-wheels = [2]  # rear wheel indicies for motor torque
+wheels = [2,3]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
-inactive_joints = [3, 5, 7]
+inactive_wheels = [ 5, 7]
 
-for wheel in inactive_joints:
+for wheel in inactive_wheels:
   p.setJointMotorControl2(car, wheel, p.VELOCITY_CONTROL, targetVelocity=0, force=0)
 
+#create a correction value slider
+correctionSlider = p.addUserDebugParameter("CorrectionValue", 0, 0.05, 0.01)
+
 #for left turns decrease speed for right turns increase speed 
-targetVelocity =  0 #rad/s
+targetVelocity =  15 #rad/s
 steeringAngle = 0 # degrees
 set_force = 15 # Newtons
+length = 0.00032500 #meters between the front axle and back axle
+width = 0.0002 #meters between left and right wheel
+left_wheel_angle = 0
+right_wheel_angle = 0
+correction = p.readUserDebugParameter(correctionSlider) 
 
 p.changeDynamics(track, -1, lateralFriction=1) #change friction of the base link 
 for wheel in wheels:
@@ -43,7 +54,8 @@ keywords = {0: ['forward', 'drive', 'front', 'forwards'], 1: ['backward', 'rever
 def process_command():
     recog = sr.Recognizer()
     with sr.Microphone() as source:
-        print("Listening for commands...")
+        print("Listening for commands...\
+              \n'Forward x',  'Backward x', 'Left x', 'Right x', 'Stop',")
         audio = recog.listen(source)
 
     try:
@@ -85,9 +97,7 @@ def process_command():
 def voice_command_thread():
     global targetVelocity, steeringAngle
     while True:
-        #direction, magnitude = process_command()
-        direction = input('direction: ')
-        magnitude = float(input('magnitude: '))
+        direction, magnitude = process_command()
         # Move forward x magnitude
         if direction in keywords[0] and magnitude:
             targetVelocity = magnitude
@@ -104,36 +114,49 @@ def voice_command_thread():
         # Turn left
         elif direction in keywords[2]:
             steeringAngle = np.deg2rad(magnitude)
-            targetVelocity=targetVelocity 
-            # print(steeringAngle)
+            print(f"Turning left with angle: {steeringAngle}")
         
         # Turn right
         elif direction in keywords[3]:
             steeringAngle = -np.deg2rad(magnitude)
-            targetVelocity=targetVelocity
-            # print(steeringAngle)
+            print(f"Turning right with angle: {steeringAngle}")
 
         # Stop
         elif direction in keywords[4]:
             targetVelocity = 0
             steeringAngle = 0
+        
 
 #runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
 
 while p.isConnected():
+    #update the correction value
+    correction = p.readUserDebugParameter(correctionSlider)
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=2, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=20, cameraYaw=-40, cameraPitch=-40, cameraTargetPosition=Position)
+
+    #gradually bring the wheels back to 0 position - allows wider turn
+    if abs(steeringAngle) > np.deg2rad(correction):
+        steeringAngle -= np.sign(steeringAngle)*np.deg2rad(correction)
+    else:
+        steeringAngle = 0
+    
+    #make sure the steering is within Ackermann Steering bounds (-35 -- 35 degrees)
+    steeringAngle = np.clip(steeringAngle, -0.610865, 0.610865)
+
+    #set the wheel angles for Ackermann drive
+    right_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length + 0.5*width*np.tan(steeringAngle))) #right wheel
+    left_wheel_angle = np.arctan((length*np.tan(steeringAngle))/(length - 0.5*width*np.tan(steeringAngle))) #left wheel
 
     # Sets the speed for each drive wheel
     for wheel in wheels:
         p.setJointMotorControl2(car, jointIndex=wheel, controlMode=p.VELOCITY_CONTROL, targetVelocity=targetVelocity, force=set_force)
     
     # Sets the steering for each front wheel
-    p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
-    p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=steeringAngle)
-    
+    p.setJointMotorControl2(car, jointIndex=steering[0], controlMode=p.POSITION_CONTROL, targetPosition=right_wheel_angle)
+    p.setJointMotorControl2(car, jointIndex=steering[1], controlMode=p.POSITION_CONTROL, targetPosition=left_wheel_angle)
 
     p.stepSimulation()
     time.sleep(1/240)
