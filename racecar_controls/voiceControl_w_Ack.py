@@ -52,7 +52,7 @@ def process_command():
     with sr.Microphone() as source:
         print("Listening for commands...\
               \nPossible Main Commands:\
-              \n'Forward x', 'Left x', 'Right x', 'Stop', 'Backward x'\
+              \n'Forward x',  'Backward x', 'Left x', 'Right x', 'Stop',\
               \nWhere x is a positive float.\n")
         audio = recog.listen(source)
 
