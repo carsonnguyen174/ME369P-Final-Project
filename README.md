@@ -1,13 +1,13 @@
 1) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
    
-3) To install Pybullet you must first have C++ on your computer
- - Windows:
-   pip install pybullet
-   or 
-   conda install conda-forge::pybullet
-   
-   -Linux:
-   sudo pip3 install by bullet
+2) To install Pybullet you must first have C++ on your computer
+   - Windows:
+        - pip install pybullet 
+          or
+          conda install conda-forge::pybullet
+
+     - Linux:
+        -sudo pip3 install by bullet
 
 3) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
