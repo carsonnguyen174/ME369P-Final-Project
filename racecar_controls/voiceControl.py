@@ -137,10 +137,10 @@ while p.isConnected():
     correction = p.readUserDebugParameter(correctionSlider)
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=5, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=4, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
 
     #gradually bring the wheels back to 0 position - allows wider turn
-    if abs(steeringAngle) > np.deg2rad(correction):
+    if abs(steeringAngle) > np.deg2rad(correction) and targetVelocity != 0:
         steeringAngle -= np.sign(steeringAngle)*np.deg2rad(correction)
     else:
         steeringAngle = 0
