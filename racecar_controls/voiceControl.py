@@ -20,7 +20,7 @@ track=p.loadURDF("track/urdf/track.urdf", start_pos, start_orientation)
 cylinder = p.loadURDF("obstacle1/urdf/obstacle1.urdf", [0, 0, 3], start_orientation)  
 cube = p.loadURDF("obstacle2/urdf/obstacle2.urdf", [0, 0, 3], start_orientation)
 #change last set of [x,y,z] to change obstacle placement, orgin is the flag in the track 
-p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [2, 2, 0.5]) 
+p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [2, 4, 0.5]) 
 p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [-4, -2, 0.5])
 
 wheels = [2,3]  # rear wheel indicies for motor torque
@@ -34,7 +34,7 @@ for wheel in inactive_wheels:
 correctionSlider = p.addUserDebugParameter("CorrectionValue", 0, 0.05, 0.01)
 
 #for left turns decrease speed for right turns increase speed 
-targetVelocity =  15 #rad/s
+targetVelocity =  0 #rad/s
 steeringAngle = 0 # degrees
 set_force = 15 # Newtons
 length = 0.00032500 #meters between the front axle and back axle
@@ -81,7 +81,6 @@ def process_command():
             except:
                 print("Please enter in a valid command followed by a floating positive number")
                 return None, None
-            
         else:
             magnitude = 0
 
@@ -127,7 +126,6 @@ def voice_command_thread():
             targetVelocity = 0
             steeringAngle = 0
         
-
 #runs the current speed/direction while allowing to change it using voice commands
 threading.Thread(target=voice_command_thread, daemon=True).start()
 
@@ -136,7 +134,7 @@ while p.isConnected():
     correction = p.readUserDebugParameter(correctionSlider)
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=20, cameraYaw=-40, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
 
     #gradually bring the wheels back to 0 position - allows wider turn
     if abs(steeringAngle) > np.deg2rad(correction):
