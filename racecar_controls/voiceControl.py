@@ -19,8 +19,9 @@ car = p.loadURDF("racecar/racecar.urdf",[1,0,5], start_orientation)
 track=p.loadURDF("track/urdf/track.urdf", start_pos, start_orientation)
 cylinder = p.loadURDF("obstacle1/urdf/obstacle1.urdf", [0, 0, 3], start_orientation)  
 cube = p.loadURDF("obstacle2/urdf/obstacle2.urdf", [0, 0, 3], start_orientation)
-p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [2, 3, 0.5])
-p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [3, -5, 0.5])
+#change last set of [x,y,z] to change obstacle placement, orgin is the flag in the track 
+p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [2, 2, 0.5]) 
+p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [-4, -2, 0.5])
 
 wheels = [2,3]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
