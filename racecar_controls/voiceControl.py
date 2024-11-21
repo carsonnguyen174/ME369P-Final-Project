@@ -13,11 +13,12 @@ p.setGravity(0, 0, -9.81)
 p.setRealTimeSimulation(0)
 
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
-start_pos = [0, 0, 0]  
+start_pos = [0, 0, .5]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-car = p.loadURDF("racecar/racecar.urdf",[0,0,1], start_orientation)
-track=p.loadURDF("track2/urdf/track2.urdf", start_pos, start_orientation)
+car = p.loadURDF("racecar/racecar.urdf",[-1, 0, 5], start_orientation)
+track=p.loadURDF("track3/urdf/track3.urdf", start_pos, start_orientation)
 
+p.setCollisionFilterGroupMask(track, -1, 1, 1,)
 wheels = [2]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
 inactive_wheels = [3, 5, 7]
