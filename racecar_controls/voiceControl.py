@@ -84,9 +84,9 @@ def process_command():
 def voice_command_thread():
     global targetVelocity, steeringAngle
     while True:
-        direction, magnitude = process_command()
-        # direction = input('direction: ')
-        # magnitude = float(input('magnitude: '))
+        #direction, magnitude = process_command()
+        direction = input('direction: ')
+        magnitude = float(input('magnitude: '))
         # Move forward x magnitude
         if direction in keywords[0] and magnitude:
             targetVelocity = magnitude
@@ -103,11 +103,13 @@ def voice_command_thread():
         # Turn left
         elif direction in keywords[2]:
             steeringAngle = np.deg2rad(magnitude)
+            targetVelocity=targetVelocity 
             # print(steeringAngle)
         
         # Turn right
         elif direction in keywords[3]:
             steeringAngle = -np.deg2rad(magnitude)
+            targetVelocity=targetVelocity
             # print(steeringAngle)
 
         # Stop
