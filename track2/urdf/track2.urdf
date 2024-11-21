@@ -3,22 +3,22 @@
      Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
-  name="track3">
+  name="track2">
   <link
     name="base_link">
     <inertial>
       <origin
-        xyz="5.65276978842518 -2.5821150181252 -0.208493949958198"
+        xyz="3.31026103332738 0.25 2.99164242992945"
         rpy="0 0 0" />
       <mass
-        value="155904.571726482" />
+        value="147534.352794364" />
       <inertia
-        ixx="2461365.61937811"
-        ixy="-37133.7291671346"
-        ixz="-14794.5476401383"
-        iyy="13197686.3532147"
-        iyz="-766.066101087171"
-        izz="15641095.383409" />
+        ixx="2278537.36495596"
+        ixy="-6.66133814775094E-13"
+        ixz="5.17563005942969E-10"
+        iyy="15249667.2974511"
+        iyz="3.17861925591204E-13"
+        izz="12977277.1971949" />
     </inertial>
     <visual>
       <origin
@@ -26,7 +26,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://track3/meshes/base_link.STL" />
+          filename="package://track2/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -40,7 +40,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://track3/meshes/base_link.STL" />
+          filename="package://track2/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>

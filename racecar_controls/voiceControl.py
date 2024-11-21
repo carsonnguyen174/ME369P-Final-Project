@@ -15,13 +15,16 @@ p.setRealTimeSimulation(0)
 plane = p.loadURDF('plane.urdf', [0, 0, 0], [0, 0, 0, 1])
 start_pos = [0, 0, .5]  
 start_orientation = p.getQuaternionFromEuler([0, 0, 0])
-car = p.loadURDF("racecar/racecar.urdf",[1,0,5], start_orientation)
-track=p.loadURDF("track/urdf/track.urdf", start_pos, start_orientation)
-cylinder = p.loadURDF("obstacle1/urdf/obstacle1.urdf", [0, 0, 3], start_orientation)  
-cube = p.loadURDF("obstacle2/urdf/obstacle2.urdf", [0, 0, 3], start_orientation)
-#change last set of [x,y,z] to change obstacle placement, orgin is the flag in the track 
-p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [2, 4, 0.5]) 
-p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [-4, -2, 0.5])
+car = p.loadURDF("racecar/racecar.urdf",[1,0,4], start_orientation)
+track=p.loadURDF("track2/urdf/track2.urdf", start_pos, start_orientation)
+cylinder = p.loadURDF("obstacle1/urdf/obstacle1.urdf", [0, 0, .5], start_orientation)
+cylinder2 = p.loadURDF("obstacle1/urdf/obstacle1.urdf", [0, 0, .5], start_orientation)  
+cube = p.loadURDF("obstacle2/urdf/obstacle2.urdf", [0, 0, .5], start_orientation)
+
+#change last set of [x,y,z] to change obstacle placement
+p.createConstraint(cylinder, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [3, -5, -3]) 
+p.createConstraint(cylinder2, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [8, -7, -3]) 
+p.createConstraint(cube, -1, track, -1, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0], [0, 0, -3])
 
 wheels = [2,3]  # rear wheel indicies for motor torque
 steering = [4, 6]  # front wheels indicies for steering angle
@@ -134,7 +137,7 @@ while p.isConnected():
     correction = p.readUserDebugParameter(correctionSlider)
 
     Position, Orientation = p.getBasePositionAndOrientation(car)
-    p.resetDebugVisualizerCamera(cameraDistance=10, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
+    p.resetDebugVisualizerCamera(cameraDistance=5, cameraYaw=-90, cameraPitch=-40, cameraTargetPosition=Position)
 
     #gradually bring the wheels back to 0 position - allows wider turn
     if abs(steeringAngle) > np.deg2rad(correction):
