@@ -7,7 +7,7 @@
           conda install conda-forge::pybullet
 
      - Linux:
-        -sudo pip3 install by bullet
+        - sudo pip3 install by bullet
 
 3) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
