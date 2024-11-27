@@ -1,9 +1,10 @@
 1) Main code: race_controls --> voiceControl.py
+
    Ensure that the entire repository is open to access the right file paths to open dependents within voiceControl.py
    
-2) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
+3) Documentation: https://docs.google.com/document/d/1-2BnD_YAyNnpGMFKRgEGNweAAn-IqZWxb_EUYkL06Tc/edit?usp=sharing
    
-3) To install Pybullet you must first have C++ on your computer
+4) To install Pybullet you must first have C++ on your computer
    - Windows:
         - pip install pybullet 
           or
@@ -12,7 +13,7 @@
    - Linux:
         - sudo pip3 install by bullet 
 
-4) To install SpeechRecognition and its required dependencies:
+5) To install SpeechRecognition and its required dependencies:
     - Windows (non-x84):
         - Install SpeechRecognition package:
             *pip install SpeechRecognition*
