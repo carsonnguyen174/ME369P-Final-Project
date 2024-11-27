@@ -1,4 +1,4 @@
-1) Main code: race_controls --> voiceControl.py
+1) Main code: racecar_controls --> voiceControl.py
 
    Ensure that the entire repository is open to access the right file paths to open dependents within voiceControl.py
    
